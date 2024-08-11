@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+ body {
+    background-color: #525252;
+    font-size: 1em;
+    font-family: 'Courier New', Courier, monospace;
+ }
+
+ input {
+    background-color: #e6e6e6;
+ }
