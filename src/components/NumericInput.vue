@@ -1,13 +1,22 @@
 <template>
     <input class="resizable-input" @beforeinput="(e: Event) => onBeforeinput(e as InputEvent)" @paste="onPaste"
-        :value="number" @input="onInput" name="number-nikita" id="number-nikita" />
+        :value="number" @input="onInputEventHandler" name="number-nikita" id="number-nikita" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
+const props = defineProps({
+    modelValue: {
+        required: false,
+        type: String
+    }
+})
+
+const emit = defineEmits(['update:modelValue'])
 const number = ref()
-const digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'] // Можно использовать регулярное выражение, но предпочту так
+
+const regexDigits = /^[0-9\s]+$/;
 
 const width = ref('72px')
 const minWidth = ref('72px')
@@ -18,19 +27,16 @@ const onPaste = (e: ClipboardEvent) => {
 
 const onBeforeinput = (e: InputEvent) => {
     // нужно сделать обработку для ctr+v
-    if (e.data && !digits.includes(e.data)) {
+    if (e.data && !regexDigits.test(e.data)) {
         e.preventDefault()
         return
     }
 }
 
-const onInput = (e: Event) => {
-    if (!e.target) return
-
-    const el = e.target as HTMLInputElement
+const onInputHandler = (value: string) => {
     let str = []
     let i = 0;
-    const clearedStr = el.value.replace(/ /g, '')
+    const clearedStr = value.replace(/ /g, '')
 
     while (true) {
         let start = clearedStr.length - (i + 3) < 0 ? 0 : clearedStr.length - (i + 3)
@@ -50,8 +56,22 @@ const onInput = (e: Event) => {
         return
     }
 
+    emit('update:modelValue', number.value)
     width.value = `${number.value.length}ch`
 }
+
+const onInputEventHandler = (e: Event) => {
+    if (!e.target) return
+
+    const el = e.target as HTMLInputElement
+    onInputHandler(el.value)
+}
+
+watch(() => props.modelValue, () => {
+    if (!props.modelValue) return
+    if (regexDigits.test(props.modelValue))
+        onInputHandler(props.modelValue)
+})
 
 </script>
 
