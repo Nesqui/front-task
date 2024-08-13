@@ -1,15 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Koulen&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
- body {
-    background-color: #525252;
-    font-size: 1.5em;
-    font-family: 'Courier New', Courier, monospace;
+body {
+    font-size: 18px;
     color: aquamarine;
- }
+}
 
- input {
-    background-color: #e6e6e6;
-    color: black;
- }
+:root {
+    --dark: #1E0E4C;
+    --primary: #3D06D7;
+    --primary-light: #906FEE;
+    --light-grey: #CFCADF;
+}
